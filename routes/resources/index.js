@@ -10,7 +10,6 @@ const resourceAirbaseId = 'tblzoUqKSfZudLKav';
 
 const errorMessage =  'Sorry, something went wrong. Please try again.';
 
-
 const cacheNames = {
   loaded: 'resourceData',
   array: 'resourceArray',
