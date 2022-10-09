@@ -10,7 +10,7 @@ const organizationAirbaseId = 'tblPfMrydlkmbh8u2';
 const errorMessage =  'Sorry, something went wrong. Please try again.';
 
 
-const cacheNames = {
+const organizationCacheNames = {
   loaded: 'organizationData',
   array: 'organizationArray',
   object: 'organizationObject',
@@ -22,15 +22,15 @@ module.exports = async function (fastify, opts) {
 
     const {output} = req.query;
 
-    let lookupResources = {};
-    let resourcesArray = [];
+    let lookupOrgs = {};
+    let orgsArray = [];
 
     let queryResponse = errorMessage
 
-    if (fastify.cache().has(cacheNames.loaded)) {
+    if (fastify.cache().has(organizationCacheNames.loaded)) {
       
-      if (output === 'lookup')  queryResponse = fastify.cache().get(cacheNames.object)
-      else queryResponse = fastify.cache().get(cacheNames.array)
+      if (output === 'lookup')  queryResponse = fastify.cache().get(organizationCacheNames.object)
+      else queryResponse = fastify.cache().get(organizationCacheNames.array)
 
     } else {
       
@@ -47,17 +47,17 @@ module.exports = async function (fastify, opts) {
           let currentRecord = record.fields;
           currentRecord.id = record.id;
           
-          lookupResources[currentRecord.id] = currentRecord;
-          resourcesArray.push(currentRecord)
+          lookupOrgs[currentRecord.id] = currentRecord;
+          orgsArray.push(currentRecord)
         });
 
-        fastify.cache().set(cacheNames.object, lookupResources);
-        fastify.cache().set(cacheNames.array, resourcesArray);
-        fastify.cache().set(cacheNames.loaded, true);
+        fastify.cache().set(organizationCacheNames.object, lookupOrgs);
+        fastify.cache().set(organizationCacheNames.array, orgsArray);
+        fastify.cache().set(organizationCacheNames.loaded, true);
         
       }, function done(err) {
         if (err) { console.error(err); return; }
-        queryResponse = output == 'lookup' ? lookupResources : resourcesArray;
+        queryResponse = output == 'lookup' ? lookupOrgs : orgsArray;
       });
     }
 
